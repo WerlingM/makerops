@@ -1,46 +1,57 @@
-# Getting Started with Create React App
+*Makerspace Operations Application*
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This web application supports makerspace operations, focused on tool inventory, management, maintenance, training tracking.
 
-## Available Scripts
+Full stack web application:
+* Database built using Liquibase assuming a PostGRESQL database
+* Server built using NodeJS with a GraphQL API interface
+* Web application build using Typescript, React, Redux, SASS
 
-In the project directory, you can run:
+Assumes user management and accounts are handled by the Wild Apricot system.  Performs single sign on to the
+Association Site hosted on Wild Apricot.  Uses Wild Apricot APIs to get and maintain list of users.
 
-### `npm start`
+Built to support Makersmiths in Northern Virginia http://www.makersmiths.org
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Developer Notes
+These instructions assume a Linux or MacOS platform (might work in a Windows Ubuntu shell?).
+Requires Docker, docker-compse, postgresql client (psql), NodeJS, NPM, (Liquibase)[https://www.liquibase.org/]
 
-### `npm test`
+Run all components locally during development: PostgreSQL database, Node server, React client.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Setup
+Clone the repo.  At the project root run `npm install`.  This is mostly to keep Visual Studio Code happy, installing the required version of Typescript.  Make sure Visual Studio Code is set to use the Workspace typescript version (open a typescript file, click the version number on the bottom status bar, and set to use
+workspace version).
 
-### `npm run build`
+Run `npm install` again in both the server and client folders, this will install the dependencies specific to those components.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Security
+The application authenticates against the Single Sign On server, in this case using Wild Apricot.  Follow the instructions on the providers site to set up the external application.  For the development client make sure a redirect to http://localhost:3000.  Recommend a separate client definition for deployment with a redirect to the
+deployed application URL.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Running Database
+`docker-compose.yml` in the home folder is set up to run the database and migrations to build the database.  The compose is set up to store the database in a persistent volument (`pg_data`) to preserve between runs. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+From a terminal in the project root run
+`docker-compose up -d`
+to start the database. Connect to the database from command line
+`psql -h localhost -U makerops -d makerops` or use your favorite database tool.
 
-### `npm run eject`
+## Server
+See the (server readme)[./server/README.md]
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Client
+Assumes that the server will be running on port 3080.  If that changes then update the proxy
+target in package.json.  Run the server using `npm run dev` in the server folder, then run
+the client using `npm start` in the project root folder.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Created using the create-react-app project, see that project for details.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+# Deploying
+If needed, run the database migration to update the database.  Build the client application and deploy the server and the client/build folder to the production environment.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Build the client application by running 
+`npm run build`
+In the root folder.  
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+On the production server copy the `build` and `server` folders from the project.  To start the application go to the `server` folder and `npm start`.

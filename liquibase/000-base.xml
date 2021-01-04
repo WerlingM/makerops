@@ -1,0 +1,131 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="mike (generated)" id="1609364958310-1">
+        <createTable tableName="brands">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="brands_pkey"/>
+            </column>
+            <column name="name" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-2">
+        <createTable tableName="tools">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tools_pkey"/>
+            </column>
+            <column name="name" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="brand_id" type="INTEGER"/>
+            <column name="model" type="TEXT"/>
+            <column name="room_id" type="INTEGER"/>
+            <column name="serial_number" type="TEXT"/>
+            <column defaultValueBoolean="false" name="is_red_tool" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="true" name="is_working" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-3">
+        <createTable tableName="training_courses">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="training_courses_pkey"/>
+            </column>
+            <column name="title" type="TEXT"/>
+            <column name="tool_id" type="INTEGER"/>
+            <column defaultValueBoolean="false" name="is_red_tool" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-4">
+        <createTable tableName="training_records">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="training_records_pkey"/>
+            </column>
+            <column name="course_id" type="INTEGER"/>
+            <column name="trainer" type="TEXT"/>
+            <column name="member" type="TEXT"/>
+            <column name="training_complete" type="date"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-5">
+        <createTable tableName="locations">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="locations_pkey"/>
+            </column>
+            <column name="name" type="TEXT"/>
+            <column name="address" type="TEXT"/>
+            <column name="city" type="TEXT"/>
+            <column name="state" type="TEXT"/>
+            <column name="zip" type="TEXT"/>
+            <column name="abbreviation" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-6">
+        <createTable tableName="rooms">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="rooms_pkey"/>
+            </column>
+            <column name="name" type="TEXT"/>
+            <column name="steward" type="TEXT"/>
+            <column name="location_id" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-7">
+        <createTable tableName="maintenance_reports">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="maintenance_reports_pkey"/>
+            </column>
+            <column name="task_id" type="INTEGER"/>
+            <column name="maintainer" type="TEXT"/>
+            <column name="maintenance_date" type="date"/>
+            <column name="notes" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-8">
+        <createTable tableName="maintenance_tasks">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="maintenance_tasks_pkey"/>
+            </column>
+            <column name="name" type="TEXT"/>
+            <column name="tool_id" type="INTEGER"/>
+            <column name="schedurle" type="TEXT"/>
+            <column name="instructions" type="TEXT"/>
+            <column name="link" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-9">
+        <createTable tableName="tool_notes">
+            <column autoIncrement="true" name="id" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tool_notes_pkey"/>
+            </column>
+            <column name="tool_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-10">
+        <addForeignKeyConstraint baseColumnNames="brand_id" baseTableName="tools" constraintName="fk_brand" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="brands" validate="true"/>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-11">
+        <addForeignKeyConstraint baseColumnNames="tool_id" baseTableName="tool_notes" constraintName="fk_tool" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="tools" validate="true"/>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-12">
+        <addForeignKeyConstraint baseColumnNames="course_id" baseTableName="training_records" constraintName="fk_course" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="training_courses" validate="true"/>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-13">
+        <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="rooms" constraintName="fk_location" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="locations" validate="true"/>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-14">
+        <addForeignKeyConstraint baseColumnNames="room_id" baseTableName="tools" constraintName="fk_room" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="rooms" validate="true"/>
+    </changeSet>
+    <changeSet author="mike (generated)" id="1609364958310-15">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="maintenance_reports" constraintName="fk_task" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="maintenance_tasks" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

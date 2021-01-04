@@ -1,0 +1,7 @@
+type Tool {
+    name: String
+    brand: String
+}
+type Query {
+    tools: [Tool]
+}
