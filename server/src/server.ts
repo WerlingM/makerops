@@ -16,9 +16,13 @@ server.applyMiddleware({app, path: '/api/graphql'});
 app.use(bodyParser.json());
 app.use(express.static('../build'));
 
-app.post("/api/login", (req, res) => {
-    console.log("login called");
-    res.json({token: "123456"});
+//This should be coming in as a redirect form the auth server, so
+//follow the redirect to get the token, then load the app with that token
+app.get("/api/login", (req, res) => {
+    console.log("login called", req);
+    //If we are in dev mode then we need to redirect to the dev server,
+    //otherwise just load the page with the parameter (TODO)
+    res.redirect("http://localhost:3000?token=12345");
 });
 
 app.post("/api/logout", (req, res) => {

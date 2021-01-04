@@ -1,9 +1,11 @@
 import React from 'react';
+import axios from "axios";
 import { Store } from "redux";
 import { connect } from "react-redux";
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import qs from "qs";
 import { AppState } from "./Store";
 import { login as loginAction } from "./state/Auth";
+import Main from "./components/Main";
 import './styles/App.css';
 
 interface Props {
@@ -13,34 +15,29 @@ interface Props {
 }
 
 const App:React.FunctionComponent<Props> = (props: Props) => {
-  const [tools, setTools] = React.useState<any[]>([]);
+  let urlParams = qs.parse(window.location.search.slice(1)); //the string includes the leading ?, remove
 
-  const client = new ApolloClient({
-    uri: "/api/graphql",
-    cache: new InMemoryCache()
-  });
-
-  React.useEffect( () => {
-    console.log("Getting all tools");
-    client.query({
-      query: gql`
-        query tools {
-          tools { name brand}
-        }`
-    }).then((result) => {
-      console.log("Response from API", result);
-      setTools(result.data.tools);
-    })
-  }, []);
-
-  return (
-    <div className="App">
-      Some Tools
-      <header className="App-header">
-        {tools.map((tool) => (<div key={tool.name}>{tool.name}</div>))}
-      </header>
-    </div>
-  );
+  console.log(urlParams);
+  if(props.loggedIn) {
+    return (
+      <div className="App">
+        <Main />
+      </div>
+    );
+  } else if(!!urlParams.token){
+    props.login();
+    return <div>Completing authentication...</div>
+  } else {
+      const query = qs.stringify({
+        client_id: "makeropsdev",
+        redirect_uri: "http://localhost:3080/api/login",
+        scope: "contacts_me"
+      });
+      console.log(query);
+      window.location.href = 
+        `https://makersmiths.org/sys/login/OAuthLogin?${query}`;
+      return <div>Loading login...</div>
+  }
 }
 
 const mapStateToProps = (state: AppState) => {
